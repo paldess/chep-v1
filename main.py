@@ -156,6 +156,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             t.start()
         else:
             self.progressBar.setValue(int(1))
+            time.sleep(0.5)
             self.clearing()
 
 def main():
