@@ -284,8 +284,11 @@ class Ui_MainWindow(object):
         self.progressBar = QtWidgets.QProgressBar(self.worker)
         self.progressBar.setGeometry(QtCore.QRect(690, 420, 231, 23))
         self.progressBar.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.NoContextMenu)
+        self.progressBar.setMinimum(0)
         self.progressBar.setMaximum(180)
-        self.progressBar.setProperty("value", 1)
+        self.progressBar.setProperty("value", 180)
+        self.progressBar.setInvertedAppearance(False)
+        self.progressBar.setTextDirection(QtWidgets.QProgressBar.Direction.BottomToTop)
         self.progressBar.setObjectName("progressBar")
         self.label_17 = QtWidgets.QLabel(self.worker)
         self.label_17.setGeometry(QtCore.QRect(690, 370, 261, 31))
@@ -464,6 +467,8 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(8, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(9, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setItem(0, 0, item)
         self.wk.addTab(self.control, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -476,7 +481,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.wk.setCurrentIndex(2)
+        self.wk.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -614,4 +619,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "простой"))
         item = self.tableWidget.horizontalHeaderItem(9)
         item.setText(_translate("MainWindow", "проверено"))
+        __sortingEnabled = self.tableWidget.isSortingEnabled()
+        self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.wk.setTabText(self.wk.indexOf(self.control), _translate("MainWindow", "контроль"))

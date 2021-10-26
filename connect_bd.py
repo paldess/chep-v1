@@ -86,12 +86,8 @@ def chars(password, number):
     for i in result:
         if i['password_to_name'] == password:
             n = i["name"]
-            try:
-                sql = f'update smena set change_data="{n}" where id={number};'
-                conects(sql)
-            except pymysql.Error as error:
-                # print(error)
-                return 2
+            sql = f'update smena set change_data="{n}" where id={number};'
+            conects(sql)
             sql = f"select id_name_worker, id_detaly, id_operation, tune, setting, count_detaly, time_stop, commentars from smena where id={number};"
             result = conects(sql)
             return result

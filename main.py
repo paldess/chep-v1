@@ -110,14 +110,13 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 x = connect_bd.chars(password, number)
                 if x == 1:
                     errors('пароль неверный')
-                elif x == 2:
-                    errors('ошибка')
                 elif len(x) == 0:
                     errors('такой записи не найдено')
                 else:
                     self.wk.setCurrentIndex(1)
                     time.sleep(0.5)
                     x = x[0]
+                    self.ok_worker.setText('изменить')
                     self.id_worker.setText(str(x['id_name_worker']))
                     self.id_detail.setText(str(x['id_detaly']))
                     self.id_operation.setText(str(x['id_operation']))
@@ -154,6 +153,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.progressBar.setValue(int(1))
             time.sleep(0.5)
             self.clearing()
+            self.ok_worker.setText('записать')
 
 def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
