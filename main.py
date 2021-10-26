@@ -130,22 +130,24 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                         self.setting.setChecked(1)
                     self.y = number
                     self.time_update = time.time()
-                    t = threading.Thread(target=self.timeses(), name='potok')
+                    t = threading.Thread(target=self.timeses())
+                    t.daemon = True
                     r = threading.Thread(target=self.ok())
-                    t.start()
                     r.start()
+                    t.start()
+
             else:
                 errors('введите пароль')
     def ok(self):
-        pass
+        errors('3 мин на изменение')
 
     def timeses(self):
         now = time.time() - self.time_update
         self.progressBar.setValue(int(now))
         if now > 180:
             self.y = 0
-        t = threading.Timer(5, self.timeses)
-        # t.daemon = True
+        t = threading.Timer(0.5, self.timeses)
+        t.daemon = True
         if self.y != 0:
             t.start()
         else:
