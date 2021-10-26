@@ -31,11 +31,16 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ok_go.clicked.connect(self.controllas)
         self.go.clicked.connect(self.change)
         self.y = 0
+        self.numbers_view = []
         self.pushButton.clicked.connect(self.clearing)
         self.progressBar.setValue(int(1))
 
     def id_name_workers(self):
-        self.workers.setText(connect_bd.workers().to_string(header=False, index=False, col_space=14))
+        workers = connect_bd.workers()
+        if workers != 'not ok':
+            self.workers.setText(pd.DataFrame(workers, columns=['id', 'name']).to_string(header=False, index=False, col_space=14))
+        else:
+            errors('нет подключения')
 
     def view_s(self):
         x = str(connect_bd.view_details(self.id_detail_view.text())).replace('{', '\n')
@@ -81,19 +86,24 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         x = self.calendar.date()
         dates = [x.year(), x.month(), x.day()]
         zapros = connect_bd.updates(dates)
-        zapros_1 = pd.DataFrame(zapros, columns=['№', 'исполнитель', 'деталь', 'операция', 'брак', 'кол-во', 'наладка', 'комментарий', 'простой', 'проверено'])
-        self.numbers_view = zapros_1['№'].to_list()
-        headers = zapros_1.columns.values.tolist()
-        for index, row in zapros_1.iterrows():
-            for i in range(len(row)):
-                self.tableWidget.setHorizontalHeaderLabels(headers)
-                self.tableWidget.setItem(index, i, QTableWidgetItem(str(row[i])))
+        if zapros != 'not ok':
+            zapros_1 = pd.DataFrame(zapros, columns=['№', 'исполнитель', 'деталь', 'операция', 'брак', 'кол-во', 'наладка', 'комментарий', 'простой', 'проверено'])
+            self.numbers_view = zapros_1['№'].to_list()
+            headers = zapros_1.columns.values.tolist()
+            for index, row in zapros_1.iterrows():
+                for i in range(len(row)):
+                    self.tableWidget.setHorizontalHeaderLabels(headers)
+                    self.tableWidget.setItem(index, i, QTableWidgetItem(str(row[i])))
+        else:
+            errors('нет подключения')
 
     def controllas(self):
         number = self.password_2.text()
         self.password_2.clear()
-        if len(number)>0:
+        if len(number) > 0:
             x = connect_bd.controll(self.numbers_view, number)
+            self.numbers_view = []
+            self.tableWidget.clear()
             errors(x)
         else:
             errors('введите пароль')
@@ -110,6 +120,8 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 x = connect_bd.chars(password, number)
                 if x == 1:
                     errors('пароль неверный')
+                elif x == 2:
+                    errors('ошибка')
                 elif len(x) == 0:
                     errors('такой записи не найдено')
                 else:

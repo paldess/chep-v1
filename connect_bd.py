@@ -62,34 +62,40 @@ def updates(date):
 
 def workers():
     sql = "select id, name from workers;"
-    result = pd.DataFrame(conects(sql), columns=['id', 'name'])
+    result = conects(sql)
     return result
 
 
 def controll(list_number, password):
     sql = "select name, password_to_name from passwords;"
     result = conects(sql)
-    for i in result:
-        if i['password_to_name'] == password:
-            n = i["name"]
-            for j in list_number:
-                sql = f'update smena set controll="{n}" where id={j};'
-                conects(sql)
-            return 'изменения приняты'
-    return 'пароль неверный'
-
+    if result != 'not ok':
+        for i in result:
+            if i['password_to_name'] == password:
+                n = i["name"]
+                if len(list_number) == 0:
+                    return 'нет просмотренных результатов'
+                for j in list_number:
+                    sql = f'update smena set controll="{n}" where id={j};'
+                    conects(sql)
+                return 'изменения приняты'
+        return 'пароль неверный'
+    else:
+        return 'нет подключения'
 
 
 def chars(password, number):
     sql = "select name, password_to_name from passwords;"
     result = conects(sql)
-    for i in result:
-        if i['password_to_name'] == password:
-            n = i["name"]
-            sql = f'update smena set change_data="{n}" where id={number};'
-            conects(sql)
-            sql = f"select id_name_worker, id_detaly, id_operation, tune, setting, count_detaly, time_stop, commentars from smena where id={number};"
-            result = conects(sql)
-            return result
-    return 1
-
+    if result != 'not ok':
+        for i in result:
+            if i['password_to_name'] == password:
+                n = i["name"]
+                sql = f'update smena set change_data="{n}" where id={number};'
+                conects(sql)
+                sql = f"select id_name_worker, id_detaly, id_operation, tune, setting, count_detaly, time_stop, commentars from smena where id={number};"
+                result = conects(sql)
+                return result
+        return 1
+    else:
+        return 2
