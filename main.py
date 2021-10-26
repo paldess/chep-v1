@@ -144,9 +144,8 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progressBar.setValue(int(now))
         if now > 180:
             self.y = 0
-        # print(self.y)
-        t = threading.Timer(3.6, self.timeses)
-        t.daemon = True
+        t = threading.Timer(5, self.timeses)
+        # t.daemon = True
         if self.y != 0:
             t.start()
         else:
