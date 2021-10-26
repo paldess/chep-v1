@@ -17,19 +17,15 @@ def errors(r):
     msg.exec()
 
 
-
-
 class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
     del_cod = ["'", "Decimal", "')}", '(', '[', ']', ')', '}', ',']
 
     def __init__(self):
-        # Это здесь нужно для доступа к переменным, методам
-        # и т.д. в файле design.py
         super().__init__()
         self.setupUi(self)  # Это нужно для инициализации нашего дизайна
         self.view_data_detaly.clicked.connect(self.view_s)
         self.ok_worker.clicked.connect(self.insert_smena)
-        self.workers.setText(connect_bd.workers().to_string(header=False, index=False, col_space=20))
+        self.view_id.clicked.connect(self.id_name_workers)
         self.view_day.clicked.connect(self.calender_view)
         self.calendar.setDate(date.today())
         self.ok_go.clicked.connect(self.controllas)
@@ -37,6 +33,9 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.y = 0
         self.pushButton.clicked.connect(self.clearing)
         self.progressBar.setValue(int(1))
+
+    def id_name_workers(self):
+        self.workers.setText(connect_bd.workers().to_string(header=False, index=False, col_space=14))
 
     def view_s(self):
         x = str(connect_bd.view_details(self.id_detail_view.text())).replace('{', '\n')
@@ -60,12 +59,10 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 comment_s = self.lineEdit.text() if self.lineEdit.text() != '' else 'отсутствует'
                 time_stop = self.time_stop.text()
                 x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, self.y)
-                if self.y != 0:
+                if x == 'успешно записано':
                     self.clearing()
-                self.y = 0
-                msg = QMessageBox()
-                msg.setText(x)
-                msg.exec()
+                    self.y = 0
+                    errors(x)
         else:
             errors("Неверные данные!")
 
@@ -109,7 +106,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             number = self.number_line.text()
             self.number_line.clear()
-            if len(password)>0:
+            if len(password) > 0:
                 x = connect_bd.chars(password, number)
                 if x == 1:
                     errors('пароль неверный')
@@ -134,7 +131,6 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                         self.setting.setChecked(1)
                     self.y = number
                     self.time_update = time.time()
-                    # self.timeses()
                     t = threading.Thread(target=self.timeses(), name='potok')
                     r = threading.Thread(target=self.ok())
                     t.start()
