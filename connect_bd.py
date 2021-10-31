@@ -34,14 +34,14 @@ def view_details(number):
     return 'не существующая деталь' if result == None else result, result1
 
 
-def inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, y):
+def inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, y):
     if y == 0:
         sql = f"INSERT into smena(id_name_worker, id_detaly, id_operation, tune, count_detaly, " \
-              f"setting, commentars, time_stop) values({id_name_worker}, {id_detaly}, {id_operation}, {tune}, " \
-              f"{count_detaly}, {setting}, '{comment_s}', {time_stop});"
+              f"setting, commentars, time_stop, night_works) values({id_name_worker}, {id_detaly}, {id_operation}, {tune}, " \
+              f"{count_detaly}, {setting}, '{comment_s}', {time_stop}, {night});"
     else:
         sql = f"update smena set id_name_worker={id_name_worker}, id_detaly={id_detaly}, " \
-              f"id_operation={id_operation}, tune={tune}, count_detaly={count_detaly}, setting={setting}, commentars='{comment_s}', time_stop={time_stop} where id = {y};"
+              f"id_operation={id_operation}, tune={tune}, count_detaly={count_detaly}, setting={setting}, commentars='{comment_s}', time_stop={time_stop}, night_works={night} where id = {y};"
     x = conects(sql)
     if x == 'not ok':
         pass
@@ -99,3 +99,23 @@ def chars(password, number):
         return 1
     else:
         return 2
+
+def view_data_works_bd(on_to, to_to, id, to_time):
+    sql = f'select name as "исполнитель" from workers where id = {id}'
+    name = conects(sql)
+    if len(name) == 0:
+        return 1, 1
+    elif to_time == True:
+        sql = "select workers.name, SUM(time_work.works_time*smena.count_detaly) as 'общее время, мин' from smena " \
+              "join time_work on time_work.id_operation = smena.id_operation " \
+              "join detaly on detaly.id = smena.id_detaly " \
+              "join workers on workers.id = smena.id_name_worker " \
+              f"where workers.id = {id} and '{on_to}' < smena.date_change and smena.date_change<'{to_to}';"
+        data = conects(sql)
+        return name, data
+    else:
+        sql = "select detaly.name as 'деталь',  smena.id_operation as 'операция', smena.count_detaly as 'кол-во', smena.date_change as 'дата' from smena " \
+              "join detaly on smena.id_detaly = detaly.id " \
+              f"where '{on_to}' < smena.date_change and smena.date_change < '{to_to}' and smena.id_name_worker = {id};"
+        data = conects(sql)
+        return name, data

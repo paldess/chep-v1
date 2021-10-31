@@ -492,8 +492,8 @@
      <widget class="QLineEdit" name="id_detail_view">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>540</y>
+        <x>780</x>
+        <y>510</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -502,9 +502,9 @@
      <widget class="QPushButton" name="view_data_detaly">
       <property name="geometry">
        <rect>
-        <x>760</x>
-        <y>540</y>
-        <width>171</width>
+        <x>780</x>
+        <y>570</y>
+        <width>151</width>
         <height>41</height>
        </rect>
       </property>
@@ -515,8 +515,8 @@
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>490</y>
+        <x>780</x>
+        <y>480</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -533,6 +533,185 @@
         <width>911</width>
         <height>461</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="who_to">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>570</y>
+        <width>121</width>
+        <height>41</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="go_to">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>570</y>
+        <width>171</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>просмотр за месяц</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line_3">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>490</y>
+        <width>20</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>490</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>период</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>520</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ID исполнителя</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="to_to">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>580</y>
+        <width>141</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="currentSection">
+       <enum>QDateTimeEdit::MonthSection</enum>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="on_to">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>530</y>
+        <width>141</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="currentSection">
+       <enum>QDateTimeEdit::MonthSection</enum>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>530</y>
+        <width>47</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>с</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>580</y>
+        <width>47</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>по</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>500</y>
+        <width>20</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="Line" name="line_5">
+      <property name="geometry">
+       <rect>
+        <x>930</x>
+        <y>500</y>
+        <width>20</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="to_time">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>520</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>общее время</string>
       </property>
      </widget>
     </widget>
@@ -729,7 +908,7 @@
       <property name="geometry">
        <rect>
         <x>780</x>
-        <y>90</y>
+        <y>110</y>
         <width>141</width>
         <height>31</height>
        </rect>
@@ -769,6 +948,9 @@
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>330</x>
@@ -779,6 +961,9 @@
       </property>
      </widget>
      <widget class="QLineEdit" name="time_stop">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -929,6 +1114,66 @@
       </property>
       <property name="text">
        <string>посмотреть ID </string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="night">
+      <property name="geometry">
+       <rect>
+        <x>780</x>
+        <y>60</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string>ночная смена</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>25</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="tristate">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="stopp">
+      <property name="geometry">
+       <rect>
+        <x>780</x>
+        <y>10</y>
+        <width>201</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string>простой станка</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>25</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="tristate">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>

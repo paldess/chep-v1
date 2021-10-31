@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem
 import pandas as pd
 from window import Ui_MainWindow  # Это наш конвертированный файл дизайна
 import connect_bd
-from datetime import date
+from datetime import date, timedelta
 
 
 def errors(r):
@@ -34,6 +34,46 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.numbers_view = []
         self.pushButton.clicked.connect(self.clearing)
         self.progressBar.setValue(int(1))
+        self.go_to.clicked.connect(self.view_data_works)
+        self.on_to.setDate(date.today() - timedelta(1))
+        self.to_to.setDate(date.today())
+        self.stopp.clicked.connect(self.en)
+
+
+    def en(self):
+        if self.stopp.isChecked():
+            x = True
+        else:
+            x = False
+        self.time_stop.setEnabled(x)
+        self.id_detail.setDisabled(x)
+        self.id_operation.setDisabled(x)
+        self.count_detail.setDisabled(x)
+        self.brak.setDisabled(x)
+        self.setting.setDisabled(x)
+
+    def view_data_works(self):
+        on_to = self.on_to.text()
+        to_to = self.to_to.text()
+        on_to_1 = on_to.split(sep='.')
+        to_to_1 = to_to.split(sep='.')
+        if date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0])) < date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0])):
+            to_time = self.to_time.isChecked()
+            ID_workers = self.who_to.text()
+            if not ID_workers.isdigit():
+                errors('введите правильный ID')
+            else:
+                name, data = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
+                if name == 1:
+                    errors('такого исполнителя не найдено. проверьте ID')
+                else:
+                    view_data1 = pd.DataFrame(data)
+                    view_data = view_data1.to_string(header=True, col_space=20, justify='left')
+                    view_name = pd.DataFrame(name).to_string(header=False,  col_space=30)
+                    self.view_window.setText(view_name)
+                    self.view_window.append(view_data)
+        else:
+            errors('неправильно выбраны даты')
 
     def id_name_workers(self):
         workers = connect_bd.workers()
@@ -49,27 +89,44 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.view_window.setText(x)
 
     def insert_smena(self):
-        if self.id_worker.text().isdigit() and self.id_detail.text().isdigit() \
-                and self.id_operation.text().isdigit() and self.brak.text().isdigit() \
-                and self.count_detail.text().isdigit() and self.time_stop.text().isdigit():
-            if int(self.time_stop.text()) > 0 and int(self.count_detail.text()) > 0:
-                errors('нельзя указывать и простой и детали одновременно')
-            else:
+        if self.stopp.isChecked():
+            if self.id_worker.text().isdigit() and self.time_stop.text().isdigit():
+                id_name_worker = int(self.id_worker.text())
+                id_detaly = 0
+                id_operation = 0
+                tune = 0
+                count_detaly = 0
+                setting = 0
+                comment_s = self.lineEdit.text()
+                time_stop = self.time_stop.text()
+                night = self.night.isChecked()
+                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s,
+                                       time_stop,night, self.y)
+                if x == 'успешно записано':
+                    self.clearing()
+                    self.y = 0
+                    errors(x)
+        else:
+            if self.id_worker.text().isdigit() and self.id_detail.text().isdigit() \
+                    and self.id_operation.text().isdigit() and self.brak.text().isdigit() \
+                    and self.count_detail.text().isdigit() and self.time_stop.text().isdigit():
                 id_name_worker = int(self.id_worker.text())
                 id_detaly = int(self.id_detail.text())
                 id_operation = int(self.id_operation.text())
                 tune = int(self.brak.text())
                 count_detaly = int(self.count_detail.text())
                 setting = bool(self.setting.isChecked())
-                comment_s = self.lineEdit.text() if self.lineEdit.text() != '' else 'отсутствует'
+                comment_s = self.lineEdit.text()
                 time_stop = self.time_stop.text()
-                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, self.y)
+                night = self.night.isChecked()
+                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop,night, self.y)
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
                     errors(x)
-        else:
-            errors("Неверные данные!")
+
+            else:
+                errors("Неверные данные!")
 
     def clearing(self):
         self.id_worker.clear()
