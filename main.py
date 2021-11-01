@@ -43,6 +43,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.clearing()
         self.y = 0
         self.ok_worker.setText('записать')
+        self.indikator.setText('')
 
 
 
@@ -132,6 +133,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.clearing()
                     self.y = 0
                     self.ok_worker.setText('записать')
+                    self.indikator.setText('')
                     errors(x)
 
             else:
@@ -197,6 +199,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     time.sleep(0.5)
                     x = x[0]
                     self.ok_worker.setText('изменить')
+                    self.indikator.setText('режим изменения')
                     self.id_worker.setText(str(x['id_name_worker']))
                     self.night.setChecked(1) if x['night_works'] == 1 else self.night.setChecked(0)
                     if x['id_detaly'] > 1:
