@@ -104,18 +104,30 @@ def view_data_works_bd(on_to, to_to, id, to_time):
     sql = f'select name as "исполнитель" from workers where id = {id}'
     name = conects(sql)
     if len(name) == 0:
-        return 1, 1
+        return 1, 1, 1, 1
     elif to_time == True:
-        sql = "select workers.name, SUM(time_work.works_time*smena.count_detaly) as 'общее время, мин' from smena " \
+        sql = "select workers.name, SUM(time_work.works_time*smena.count_detaly) as 'общее время ночных, мин' from smena " \
+              "join time_work on time_work.id_operation = smena.id_operation " \
+              "join detaly on detaly.id = smena.id_detaly " \
+              "join workers on workers.id = smena.id_name_worker " \
+              f"where smena.night_works=1 and workers.id = {id} and '{on_to}' < smena.date_change and smena.date_change<'{to_to}';"
+        data = conects(sql)
+        sql = "select workers.name, SUM(time_work.works_time*smena.count_detaly) as 'общее время дневных, мин' from smena " \
+              "join time_work on time_work.id_operation = smena.id_operation " \
+              "join detaly on detaly.id = smena.id_detaly " \
+              "join workers on workers.id = smena.id_name_worker " \
+              f"where smena.night_works=0 and workers.id = {id} and '{on_to}' < smena.date_change and smena.date_change<'{to_to}';"
+        data1 = conects(sql)
+        sql = "select workers.name, SUM(smena.time_stop) as 'общее время простоев, мин' from smena " \
               "join time_work on time_work.id_operation = smena.id_operation " \
               "join detaly on detaly.id = smena.id_detaly " \
               "join workers on workers.id = smena.id_name_worker " \
               f"where workers.id = {id} and '{on_to}' < smena.date_change and smena.date_change<'{to_to}';"
-        data = conects(sql)
-        return name, data
+        data2 = conects(sql)
+        return name, data, data1, data2
     else:
-        sql = "select detaly.name as 'деталь',  smena.id_operation as 'операция', smena.count_detaly as 'кол-во', smena.date_change as 'дата' from smena " \
+        sql = "select detaly.name as 'деталь',  smena.id_operation as 'операция', smena.count_detaly as 'кол-во', smena.time_stop as 'простой станка', smena.date_change as 'дата' from smena " \
               "join detaly on smena.id_detaly = detaly.id " \
               f"where smena.date_change between '{on_to}' and '{to_to}' and smena.id_name_worker = {id};"
         data = conects(sql)
-        return name, data
+        return name, data, 1, 1

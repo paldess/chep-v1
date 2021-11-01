@@ -534,6 +534,21 @@
         <height>461</height>
        </rect>
       </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+      </property>
+      <property name="lineWrapMode">
+       <enum>QTextEdit::NoWrap</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLineEdit" name="who_to">
       <property name="geometry">
@@ -560,7 +575,7 @@
        </font>
       </property>
       <property name="text">
-       <string>просмотр за месяц</string>
+       <string>просмотр за период</string>
       </property>
      </widget>
      <widget class="Line" name="line_3">

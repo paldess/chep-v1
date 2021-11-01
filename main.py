@@ -72,15 +72,27 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if not ID_workers.isdigit():
                 errors('введите правильный ID')
             else:
-                name, data = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
+                name, data_night, data_day, data_stop = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
                 if name == 1:
                     errors('такого исполнителя не найдено. проверьте ID')
+                elif data_stop == 1:
+                    view_name = pd.DataFrame(name).to_string(header=False, col_space=25)
+                    self.view_window.setText(view_name)
+                    view_data_night = pd.DataFrame(data_night)
+                    view_data_night['дата'] = view_data_night['дата'].dt.date
+                    view_data_night = view_data_night.to_string(header=True, col_space=20, justify='center')
+                    self.view_window.append(view_data_night)
+                    print()
                 else:
-                    view_data1 = pd.DataFrame(data)
-                    view_data = view_data1.to_string(header=True, col_space=20, justify='left')
+                    view_data_day = pd.DataFrame(data_day).to_string(header=True, col_space=20, justify='left')
+                    view_data_night = pd.DataFrame(data_night).to_string(header=True, col_space=20, justify='left')
+                    view_data_stop = pd.DataFrame(data_stop).to_string(header=True, col_space=20, justify='left')
                     view_name = pd.DataFrame(name).to_string(header=False,  col_space=30)
                     self.view_window.setText(view_name)
-                    self.view_window.append(view_data)
+                    self.view_window.append(view_data_day)
+                    self.view_window.append(view_data_night)
+                    self.view_window.append(view_data_stop)
+
         else:
             errors('неправильно выбраны даты')
 
@@ -128,7 +140,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 comment_s = self.lineEdit.text()
                 time_stop = 0
                 night = self.night.isChecked()
-                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop,night, self.y)
+                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, self.y)
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
