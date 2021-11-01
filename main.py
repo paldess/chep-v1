@@ -62,8 +62,10 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         on_to = self.on_to.text()
         to_to = self.to_to.text()
         on_to_1 = on_to.split(sep='.')
+        on_to = date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0]))
         to_to_1 = to_to.split(sep='.')
-        if date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0])) < date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0])):
+        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0]))
+        if on_to < to_to:
             to_time = self.to_time.isChecked()
             ID_workers = self.who_to.text()
             if not ID_workers.isdigit():

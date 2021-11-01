@@ -116,6 +116,6 @@ def view_data_works_bd(on_to, to_to, id, to_time):
     else:
         sql = "select detaly.name as 'деталь',  smena.id_operation as 'операция', smena.count_detaly as 'кол-во', smena.date_change as 'дата' from smena " \
               "join detaly on smena.id_detaly = detaly.id " \
-              f"where '{on_to}' < smena.date_change and smena.date_change < '{to_to}' and smena.id_name_worker = {id};"
+              f"where smena.date_change between '{on_to}' and '{to_to}' and smena.id_name_worker = {id};"
         data = conects(sql)
         return name, data
