@@ -33,11 +33,17 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.y = 0
         self.numbers_view = []
         self.pushButton.clicked.connect(self.clearing)
-        self.progressBar.setValue(int(1))
         self.go_to.clicked.connect(self.view_data_works)
         self.on_to.setDate(date.today() - timedelta(1))
         self.to_to.setDate(date.today())
         self.stopp.clicked.connect(self.en)
+        self.cancel_change.clicked.connect(self.cancel_ch)
+
+    def cancel_ch(self):
+        self.clearing()
+        self.y = 0
+        self.ok_worker.setText('записать')
+
 
 
     def en(self):
@@ -92,8 +98,8 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.stopp.isChecked():
             if self.id_worker.text().isdigit() and self.time_stop.text().isdigit():
                 id_name_worker = int(self.id_worker.text())
-                id_detaly = 0
-                id_operation = 0
+                id_detaly = 1
+                id_operation = 1
                 tune = 0
                 count_detaly = 0
                 setting = 0
@@ -101,7 +107,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 time_stop = self.time_stop.text()
                 night = self.night.isChecked()
                 x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s,
-                                       time_stop,night, self.y)
+                                       time_stop, night, self.y)
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
@@ -117,12 +123,13 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 count_detaly = int(self.count_detail.text())
                 setting = bool(self.setting.isChecked())
                 comment_s = self.lineEdit.text()
-                time_stop = self.time_stop.text()
+                time_stop = 0
                 night = self.night.isChecked()
                 x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop,night, self.y)
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
+                    self.ok_worker.setText('записать')
                     errors(x)
 
             else:
@@ -137,6 +144,8 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_stop.setText(str(0))
         self.lineEdit.clear()
         self.setting.setChecked(0)
+        self.night.setChecked(0)
+        self.stopp.setChecked(0)
 
     def calender_view(self):
         self.tableWidget.clear()
@@ -144,7 +153,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         dates = [x.year(), x.month(), x.day()]
         zapros = connect_bd.updates(dates)
         if zapros != 'not ok':
-            zapros_1 = pd.DataFrame(zapros, columns=['№', 'исполнитель', 'деталь', 'операция', 'брак', 'кол-во', 'наладка', 'комментарий', 'простой', 'проверено'])
+            zapros_1 = pd.DataFrame(zapros, columns=['№', 'исполнитель', 'деталь', 'операция', 'брак', 'кол-во', 'наладка', 'комментарий', 'простой', 'проверено', 'ночная смена'])
             self.numbers_view = zapros_1['№'].to_list()
             headers = zapros_1.columns.values.tolist()
             for index, row in zapros_1.iterrows():
@@ -187,43 +196,34 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     x = x[0]
                     self.ok_worker.setText('изменить')
                     self.id_worker.setText(str(x['id_name_worker']))
-                    self.id_detail.setText(str(x['id_detaly']))
-                    self.id_operation.setText(str(x['id_operation']))
-                    self.count_detail.setText(str(x['count_detaly']))
-                    self.brak.clear()
-                    self.brak.setText(str(x['tune']))
-                    self.time_stop.clear()
-                    self.time_stop.setText(str(x['time_stop']))
+                    self.night.setChecked(1) if x['night_works'] == 1 else self.night.setChecked(0)
+                    if x['id_detaly'] > 1:
+                        self.stopp.setChecked(0)
+                        self.id_detail.setText(str(x['id_detaly']))
+                        self.id_operation.setText(str(x['id_operation']))
+                        self.count_detail.setText(str(x['count_detaly']))
+                        self.brak.clear()
+                        self.brak.setText(str(x['tune']))
+                        self.en()
+                    else:
+                        self.id_detail.setText('1')
+                        self.id_operation.setText('1')
+                        self.count_detail.setText('0')
+                        self.brak.clear()
+                        self.brak.setText('0')
+                        self.stopp.setChecked(1)
+                        self.en()
+                        self.time_stop.clear()
+                        self.time_stop.setText(str(x['time_stop']))
                     self.lineEdit.setText(str(x['commentars']))
                     if x['setting'] == 1:
                         self.setting.setChecked(1)
                     self.y = number
-                    self.time_update = time.time()
-                    t = threading.Thread(target=self.timeses())
-                    t.daemon = True
-                    r = threading.Thread(target=self.ok())
-                    r.start()
-                    t.start()
+
 
             else:
                 errors('введите пароль')
-    def ok(self):
-        errors('3 мин на изменение')
 
-    def timeses(self):
-        now = time.time() - self.time_update
-        self.progressBar.setValue(int(now))
-        if now > 180:
-            self.y = 0
-        t = threading.Timer(0.5, self.timeses)
-        t.daemon = True
-        if self.y != 0:
-            t.start()
-        else:
-            self.progressBar.setValue(int(1))
-            time.sleep(0.5)
-            self.clearing()
-            self.ok_worker.setText('записать')
 
 def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication

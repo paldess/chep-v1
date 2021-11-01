@@ -54,7 +54,7 @@ def updates(date):
           f" workers.name as 'исполнитель', " \
           f"detaly.name as 'деталь', " \
           f"id_operation as 'операция', tune as 'брак', " \
-          f"count_detaly as 'кол-во', setting as 'наладка', commentars as 'комментарий', time_stop as 'простой',  controll as 'проверено' " \
+          f"count_detaly as 'кол-во', setting as 'наладка', commentars as 'комментарий', time_stop as 'простой',  controll as 'проверено', night_works as 'ночная смена' " \
           f"from smena join workers on smena.id_name_worker = workers.id join detaly on detaly.id = smena.id_detaly " \
           f"where date(smena.date_change)= '{date[0]}-{date[1]}-{date[2]}';"
     result = conects(sql)
@@ -93,7 +93,7 @@ def chars(password, number):
                 n = i["name"]
                 sql = f'update smena set change_data="{n}" where id={number};'
                 conects(sql)
-                sql = f"select id_name_worker, id_detaly, id_operation, tune, setting, count_detaly, time_stop, commentars from smena where id={number};"
+                sql = f"select id_name_worker, id_detaly, id_operation, tune, setting, count_detaly, time_stop, commentars, night_works from smena where id={number};"
                 result = conects(sql)
                 return result
         return 1
