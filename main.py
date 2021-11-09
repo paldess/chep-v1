@@ -34,7 +34,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.numbers_view = []
         self.pushButton.clicked.connect(self.clearing)
         self.go_to.clicked.connect(self.view_data_works)
-        self.on_to.setDate(date.today() - timedelta(1))
+        self.on_to.setDate(date.today() - timedelta(30))
         self.to_to.setDate(date.today())
         self.stopp.clicked.connect(self.en)
         self.cancel_change.clicked.connect(self.cancel_ch)
@@ -75,12 +75,16 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 name, data_night, data_day, data_stop = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
                 if name == 1:
                     errors('такого исполнителя не найдено. проверьте ID')
+
                 elif data_stop == 1:
-                    view_name = pd.DataFrame(name).to_string(header=False, col_space=25)
-                    self.view_window.setText(view_name)
-                    view_data_night = pd.DataFrame(data_night)
-                    view_data_night['дата'] = view_data_night['дата'].dt.date
-                    view_data_night = view_data_night.to_string(header=True, col_space=20, justify='center')
+                    if len(data_night) != 0:
+                        view_name = pd.DataFrame(name).to_string(header=False, col_space=25)
+                        self.view_window.setText(view_name)
+                        view_data_night = pd.DataFrame(data_night)
+                        view_data_night['дата'] = view_data_night['дата'].dt.date
+                        view_data_night = view_data_night.to_string(header=True, col_space=20, justify='center')
+                    else:
+                        view_data_night = 'нет строк для отображения'
                     self.view_window.append(view_data_night)
                     print()
                 else:
