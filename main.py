@@ -78,11 +78,11 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 elif data_stop == 1:
                     if len(data_night) != 0:
-                        view_name = pd.DataFrame(name).to_string(header=False, col_space=25)
+                        view_name = pd.DataFrame(name).to_string(header=False, col_space=25, index=False)
                         self.view_window.setText(view_name)
                         view_data_night = pd.DataFrame(data_night)
                         view_data_night['дата'] = view_data_night['дата'].dt.date
-                        view_data_night = view_data_night.to_string(header=True, col_space=20, justify='center')
+                        view_data_night = view_data_night.to_string(header=True, col_space=20, justify='center', index=False)
                     else:
                         view_data_night = 'нет строк для отображения'
                     self.view_window.append(view_data_night)
