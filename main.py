@@ -65,14 +65,14 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         on_to_1 = on_to.split(sep='.')
         on_to = date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0]))
         to_to_1 = to_to.split(sep='.')
-        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0]))
+        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0])+1)
         if on_to < to_to:
             to_time = self.to_time.isChecked()
             ID_workers = self.who_to.text()
             if not ID_workers.isdigit():
                 errors('введите правильный ID')
             else:
-                name, data_night, data_day, data_stop = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
+                name, data_night, data_day, data_stop, data_set = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
                 if name == 1:
                     errors('такого исполнителя не найдено. проверьте ID')
 
@@ -86,16 +86,18 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     else:
                         view_data_night = 'нет строк для отображения'
                     self.view_window.append(view_data_night)
-                    print()
+                    # print()
                 else:
-                    view_data_day = pd.DataFrame(data_day).to_string(header=True, col_space=20, justify='left')
-                    view_data_night = pd.DataFrame(data_night).to_string(header=True, col_space=20, justify='left')
-                    view_data_stop = pd.DataFrame(data_stop).to_string(header=True, col_space=20, justify='left')
-                    view_name = pd.DataFrame(name).to_string(header=False,  col_space=30)
+                    view_data_day = pd.DataFrame(data_day).to_string(header=True, col_space=20, justify='left', index=False)
+                    view_data_night = pd.DataFrame(data_night).to_string(header=True, col_space=20, justify='left', index=False)
+                    view_data_stop = pd.DataFrame(data_stop).to_string(header=True, col_space=20, justify='left', index=False)
+                    view_name = pd.DataFrame(name).to_string(header=False,  col_space=30, index=False)
+                    view_set = pd.DataFrame(data_set).to_string(header=True,  col_space=10, index=False, justify='left')
                     self.view_window.setText(view_name)
                     self.view_window.append(view_data_day)
                     self.view_window.append(view_data_night)
                     self.view_window.append(view_data_stop)
+                    self.view_window.append(view_set)
 
         else:
             errors('неправильно выбраны даты')
@@ -151,6 +153,8 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.ok_worker.setText('записать')
                     self.indikator.setText('')
                     errors(x)
+                else:
+                    errors(x)
 
             else:
                 errors("Неверные данные!")
@@ -166,6 +170,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setting.setChecked(0)
         self.night.setChecked(0)
         self.stopp.setChecked(0)
+        self.en()
 
     def calender_view(self):
         self.tableWidget.clear()
