@@ -250,6 +250,7 @@ class Ui_MainWindow(object):
         self.line_5.setObjectName("line_5")
         self.to_time = QtWidgets.QCheckBox(self.view)
         self.to_time.setGeometry(QtCore.QRect(440, 520, 151, 31))
+        self.to_time.setChecked(True)
         self.to_time.setObjectName("to_time")
         self.wk.addTab(self.view, "")
         self.worker = QtWidgets.QWidget()

@@ -728,6 +728,9 @@
       <property name="text">
        <string>общее время</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="worker">

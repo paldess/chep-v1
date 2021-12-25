@@ -132,6 +132,8 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
+                    self.indikator.setText('')
+                    self.ok_worker.setText('записать')
                     errors(x)
         else:
             if self.id_worker.text().isdigit() and self.id_detail.text().isdigit() \
