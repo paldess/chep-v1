@@ -108,7 +108,7 @@ def view_data_works_bd(on_to, to_to, id, to_time):
     sql = f'select name as "исполнитель" from workers where id = {id}'
     name = conects(sql)
     if len(name) == 0:
-        return 1, 1, 1, 1, 1
+        return 1, 1, 1, 1, 1, 1
     elif to_time == True:
         sql = "select  SUM(time_work.works_time*smena.count_detaly) as 'общее время ночных, мин' from smena " \
               "join time_work on time_work.id_operation = smena.id_operation " \
@@ -124,10 +124,13 @@ def view_data_works_bd(on_to, to_to, id, to_time):
         sql = "select  SUM(setting) as 'кол-во наладок' from smena " \
               f"where id_name_worker = {id} and date_change between date('{on_to}') and date('{to_to}');"
         data3 = conects(sql)
-        return name, data, data1, data2, data3
+        sql = "select  SUM(setting_work) as 'инструментов налажено' from smena " \
+              f"where id_name_worker = {id} and date_change between date('{on_to}') and date('{to_to}');"
+        data4 = conects(sql)
+        return name, data, data1, data2, data3, data4
     else:
         sql = "select detaly.name as 'деталь',  smena.id_operation as 'операция', smena.count_detaly as 'кол-во', smena.time_stop as 'простой станка', smena.date_change as 'дата' from smena " \
               "join detaly on smena.id_detaly = detaly.id " \
               f"where smena.date_change between '{on_to}' and '{to_to}' and smena.id_name_worker = {id};"
         data = conects(sql)
-        return name, data, 1, 1, 1
+        return name, data, 1, 1, 1, 1

@@ -73,7 +73,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if not ID_workers.isdigit():
                 errors('введите правильный ID')
             else:
-                name, data_night, data_day, data_stop, data_set = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
+                name, data_night, data_day, data_stop, data_set, data_set_work = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
                 if name == 1:
                     errors('такого исполнителя не найдено. проверьте ID')
 
@@ -94,11 +94,13 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     view_data_stop = pd.DataFrame(data_stop).to_string(header=True, col_space=20, justify='left', index=False)
                     view_name = pd.DataFrame(name).to_string(header=False,  col_space=30, index=False)
                     view_set = pd.DataFrame(data_set).to_string(header=True,  col_space=10, index=False, justify='left')
+                    view_set_work = pd.DataFrame(data_set_work).to_string(header=True, col_space=10, index=False, justify='left')
                     self.view_window.setText(view_name)
                     self.view_window.append(view_data_day)
                     self.view_window.append(view_data_night)
                     self.view_window.append(view_data_stop)
                     self.view_window.append(view_set)
+                    self.view_window.append(view_set_work)
 
         else:
             errors('неправильно выбраны даты')
