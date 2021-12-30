@@ -34,17 +34,18 @@ def view_details(number):
     return 'не существующая деталь' if result == None else result, result1
 
 
-def inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, y):
+def inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, setting_work, y):
+    setting_work = setting_work if id_operation <= 50 and id_operation >= 35 else 0
     sql = f'SELECT time_work.works_time from time_work where id_detaly = {id_detaly} and id_operation ={id_operation};'
     if len(conects(sql))==0:
         return 'нет таких операций '
     if y == 0:
         sql = f"INSERT into smena(id_name_worker, id_detaly, id_operation, tune, count_detaly, " \
-              f"setting, commentars, time_stop, night_works) values({id_name_worker}, {id_detaly}, {id_operation}, {tune}, " \
-              f"{count_detaly}, {setting}, '{comment_s}', {time_stop}, {night});"
+              f"setting, commentars, time_stop, night_works, setting_work) values({id_name_worker}, {id_detaly}, {id_operation}, {tune}, " \
+              f"{count_detaly}, {setting}, '{comment_s}', {time_stop}, {night}, {setting_work});"
     else:
         sql = f"update smena set id_name_worker={id_name_worker}, id_detaly={id_detaly}, " \
-              f"id_operation={id_operation}, tune={tune}, count_detaly={count_detaly}, setting={setting}, commentars='{comment_s}', time_stop={time_stop}, night_works={night} where id = {y};"
+              f"id_operation={id_operation}, tune={tune}, count_detaly={count_detaly}, setting={setting}, commentars='{comment_s}', time_stop={time_stop}, night_works={night}, setting_work={setting_work} where id = {y};"
     x = conects(sql)
     if x == 'not ok':
         return 'не записано. ошибка'

@@ -12,7 +12,6 @@ from datetime import date, timedelta
 def errors(r):
     msg = QMessageBox()
     msg.setText(r)
-    # msg.setInformativeText('Проверьте введенные параметры')
     msg.setWindowTitle("Ошибка")
     msg.exec()
 
@@ -38,6 +37,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.to_to.setDate(date.today())
         self.stopp.clicked.connect(self.en)
         self.cancel_change.clicked.connect(self.cancel_ch)
+        self.setting.clicked.connect(self.en)
 
     def cancel_ch(self):
         self.clearing()
@@ -52,6 +52,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             x = True
         else:
             x = False
+        self.spinBox.setEnabled(True if self.setting.isChecked() and x == False else False)
         self.time_stop.setEnabled(x)
         self.id_detail.setDisabled(x)
         self.id_operation.setDisabled(x)
@@ -145,10 +146,11 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 tune = int(self.brak.text())
                 count_detaly = int(self.count_detail.text())
                 setting = bool(self.setting.isChecked())
+                setting_work = int(self.spinBox.text()) if setting == True else 0
                 comment_s = self.lineEdit.text()
                 time_stop = 0
                 night = self.night.isChecked()
-                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, self.y)
+                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, setting_work, self.y)
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
