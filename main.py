@@ -1,12 +1,12 @@
 import sys  # sys нужен для передачи argv в QApplication
 import time
-import threading
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem
+from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog
 import pandas as pd
 from window import Ui_MainWindow  # Это наш конвертированный файл дизайна
 import connect_bd
 from datetime import date, timedelta
+import openpyxl
 
 
 def errors(r):
@@ -38,6 +38,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.stopp.clicked.connect(self.en)
         self.cancel_change.clicked.connect(self.cancel_ch)
         self.setting.clicked.connect(self.en)
+        self.save_to.clicked.connect(self.safe_to_file)
 
     def cancel_ch(self):
         self.clearing()
@@ -60,6 +61,42 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.brak.setDisabled(x)
         self.setting.setDisabled(x)
 
+    def safe_to_file(self):
+        on_to = self.on_to.text()
+        to_to = self.to_to.text()
+        on_to_1 = on_to.split(sep='.')
+        on_to = date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0]))
+        to_to_1 = to_to.split(sep='.')
+        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0]) + 1)
+        if on_to < to_to:
+            to_time = False
+            ID_workers = self.who_to.text()
+            if not ID_workers.isdigit():
+                errors('введите правильный ID')
+            else:
+                name, data_night, data_day, data_stop, data_set, data_set_work = connect_bd.view_data_works_bd(on_to,
+                                                                                                               to_to,
+                                                                                                               ID_workers,
+                                                                                                               to_time)
+                if name == 1:
+                    errors('такого исполнителя не найдено. проверьте ID')
+
+                elif data_stop == 1:
+                    if len(data_night) != 0:
+                        name = str(name[0]['исполнитель'])
+                        view_data_night = pd.DataFrame(data_night)
+                        view_data_night['дата'] = view_data_night['дата'].dt.date
+                        print(view_data_night)
+                        filename, _ = QFileDialog.getSaveFileName(self, '', name, '*.xlsx')
+                        print(filename)
+                        view_data_night.to_excel(filename)
+                    else:
+                        view_data_night = 'нет строк для сохранения'
+                        self.view_window.setText(view_data_night)
+
+
+
+
     def view_data_works(self):
         on_to = self.on_to.text()
         to_to = self.to_to.text()
@@ -68,7 +105,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         to_to_1 = to_to.split(sep='.')
         to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0])+1)
         if on_to < to_to:
-            to_time = self.to_time.isChecked()
+            to_time = True
             ID_workers = self.who_to.text()
             if not ID_workers.isdigit():
                 errors('введите правильный ID')
@@ -87,7 +124,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     else:
                         view_data_night = 'нет строк для отображения'
                     self.view_window.append(view_data_night)
-                    # print()
+
                 else:
                     view_data_day = pd.DataFrame(data_day).to_string(header=True, col_space=20, justify='left', index=False)
                     view_data_night = pd.DataFrame(data_night).to_string(header=True, col_space=20, justify='left', index=False)

@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'цех2.ui'
+# Form implementation generated from reading ui file 'цех3.ui'
 #
 # Created by: PyQt6 UI code generator 6.2.0
 #
@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
         self.who_to.setGeometry(QtCore.QRect(280, 570, 121, 41))
         self.who_to.setObjectName("who_to")
         self.go_to = QtWidgets.QPushButton(self.view)
-        self.go_to.setGeometry(QtCore.QRect(430, 570, 171, 41))
+        self.go_to.setGeometry(QtCore.QRect(470, 570, 171, 41))
         font = QtGui.QFont()
         font.setPointSize(13)
         self.go_to.setFont(font)
@@ -215,6 +215,9 @@ class Ui_MainWindow(object):
         self.label_14.setObjectName("label_14")
         self.label_15 = QtWidgets.QLabel(self.view)
         self.label_15.setGeometry(QtCore.QRect(280, 520, 151, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.to_to = QtWidgets.QDateEdit(self.view)
         self.to_to.setGeometry(QtCore.QRect(100, 580, 141, 30))
@@ -248,10 +251,12 @@ class Ui_MainWindow(object):
         self.line_5.setFrameShape(QtWidgets.QFrame.Shape.VLine)
         self.line_5.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
         self.line_5.setObjectName("line_5")
-        self.to_time = QtWidgets.QCheckBox(self.view)
-        self.to_time.setGeometry(QtCore.QRect(440, 520, 151, 31))
-        self.to_time.setChecked(True)
-        self.to_time.setObjectName("to_time")
+        self.save_to = QtWidgets.QPushButton(self.view)
+        self.save_to.setGeometry(QtCore.QRect(470, 510, 171, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.save_to.setFont(font)
+        self.save_to.setObjectName("save_to")
         self.wk.addTab(self.view, "")
         self.worker = QtWidgets.QWidget()
         self.worker.setObjectName("worker")
@@ -599,7 +604,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.wk.setCurrentIndex(1)
+        self.wk.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -612,7 +617,7 @@ class Ui_MainWindow(object):
         self.label_15.setText(_translate("MainWindow", "ID исполнителя"))
         self.label_16.setText(_translate("MainWindow", "с"))
         self.label_18.setText(_translate("MainWindow", "по"))
-        self.to_time.setText(_translate("MainWindow", "общее время"))
+        self.save_to.setText(_translate("MainWindow", "сохранить в файл"))
         self.wk.setTabText(self.wk.indexOf(self.view), _translate("MainWindow", "просмотр"))
         self.comment.setText(_translate("MainWindow", "коментарий"))
         self.label_2.setText(_translate("MainWindow", "ID рабочего"))
