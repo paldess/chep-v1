@@ -67,7 +67,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         on_to_1 = on_to.split(sep='.')
         on_to = date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0]))
         to_to_1 = to_to.split(sep='.')
-        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0]) + 1)
+        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0]))
         if on_to < to_to:
             to_time = False
             ID_workers = self.who_to.text()
@@ -86,9 +86,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                         name = str(name[0]['исполнитель'])
                         view_data_night = pd.DataFrame(data_night)
                         view_data_night['дата'] = view_data_night['дата'].dt.date
-                        print(view_data_night)
                         filename, _ = QFileDialog.getSaveFileName(self, '', name, '*.xlsx')
-                        print(filename)
                         view_data_night.to_excel(filename)
                     else:
                         view_data_night = 'нет строк для сохранения'
@@ -103,7 +101,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         on_to_1 = on_to.split(sep='.')
         on_to = date(int(on_to_1[2]), int(on_to_1[1]), int(on_to_1[0]))
         to_to_1 = to_to.split(sep='.')
-        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0])+1)
+        to_to = date(int(to_to_1[2]), int(to_to_1[1]), int(to_to_1[0]))
         if on_to < to_to:
             to_time = True
             ID_workers = self.who_to.text()
@@ -164,11 +162,11 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 tune = 0
                 count_detaly = 0
                 setting = 0
+                setting_work = 0
                 comment_s = self.lineEdit.text()
                 time_stop = self.time_stop.text()
                 night = self.night.isChecked()
-                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s,
-                                       time_stop, night, self.y)
+                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, setting_work, self.y)
                 if x == 'успешно записано':
                     self.clearing()
                     self.y = 0
