@@ -87,7 +87,10 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                         view_data_night = pd.DataFrame(data_night)
                         view_data_night['дата'] = view_data_night['дата'].dt.date
                         filename, _ = QFileDialog.getSaveFileName(self, '', name, '*.xlsx')
-                        view_data_night.to_excel(filename)
+                        if filename == '':
+                            pass
+                        else:
+                            view_data_night.to_excel(filename)
                     else:
                         view_data_night = 'нет строк для сохранения'
                         self.view_window.setText(view_data_night)
