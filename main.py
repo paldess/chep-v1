@@ -234,14 +234,21 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def controllas(self):
         number = self.password_2.text()
+        try:
+            number_ok = tuple(int(i) for i in self.number_good.text().replace(' ', '').split(','))
+            if len(number_ok) == 1:
+                number_ok += (0,)
+            if len(number) > 0:
+                x = connect_bd.controll(number_ok, number)
+                self.numbers_view = []
+                self.tableWidget.clear()
+                errors(x)
+            else:
+                errors('введите пароль')
+        except ValueError:
+            errors('введите номера строк для подтверждения')
         self.password_2.clear()
-        if len(number) > 0:
-            x = connect_bd.controll(self.numbers_view, number)
-            self.numbers_view = []
-            self.tableWidget.clear()
-            errors(x)
-        else:
-            errors('введите пароль')
+        self.number_good.clear()
 
     def change(self):
         password = self.password.text()

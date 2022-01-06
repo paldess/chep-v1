@@ -73,7 +73,9 @@ def workers():
 def controll(list_number, password):
     sql = "select name, password_to_name from passwords;"
     result = conects(sql)
-    if result != 'not ok':
+    sql = f'select id from smena where id in {list_number};'
+    result_number = conects(sql)
+    if result != 'not ok' and result_number != 'not ok':
         for i in result:
             if i['password_to_name'] == password:
                 n = i["name"]
@@ -82,10 +84,10 @@ def controll(list_number, password):
                 for j in list_number:
                     sql = f'update smena set controll="{n}" where id={j};'
                     conects(sql)
-                return 'изменения приняты'
-        return 'пароль неверный'
+                return f'строки {str([i["id"] for i in result_number]).replace("[", "").replace("]", "")} подтверждены'
+        return 'неверный пароль'
     else:
-        return 'нет подключения'
+        return ' неверный № записи или нет подключения'
 
 
 def chars(password, number):
