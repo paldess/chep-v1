@@ -110,7 +110,7 @@ def view_data_works_bd(on_to, to_to, id, to_time):
     sql = f'select name as "исполнитель" from workers where id = {id}'
     name = conects(sql)
     if len(name) == 0:
-        return 1, 1, 1, 1, 1, 1
+        return 1, 1, 1, 1, 1, 1, 1
     elif to_time == True:
         sql = "select  SUM(time_work.works_time*smena.count_detaly) as 'общее время ночных, мин' from smena " \
               "join time_work on time_work.id_operation = smena.id_operation " \
@@ -121,7 +121,7 @@ def view_data_works_bd(on_to, to_to, id, to_time):
               f"where smena.night_works=0 and smena.id_name_worker = {id} and smena.id_detaly=time_work.id_detaly and smena.date_change between date('{on_to}') and DATE_ADD('{to_to}', INTERVAL 1 DAY);"
         data1 = conects(sql)
         sql = "select SUM(smena.time_stop) as 'общее время простоев, мин' from smena " \
-              f"where id_name_worker = {id} and date_change between date('{on_to}') and DATE_ADD('{to_to}', INTERVAL 1 DAY);"
+              f"where id_name_worker = {id} and id_detaly = 1 and date_change between date('{on_to}') and DATE_ADD('{to_to}', INTERVAL 1 DAY);"
         data2 = conects(sql)
         sql = "select  SUM(setting) as 'кол-во наладок' from smena " \
               f"where id_name_worker = {id} and date_change between date('{on_to}') and DATE_ADD('{to_to}', INTERVAL 1 DAY);"
@@ -129,7 +129,10 @@ def view_data_works_bd(on_to, to_to, id, to_time):
         sql = "select  SUM(setting_work) as 'инструментов налажено' from smena " \
               f"where id_name_worker = {id} and date_change between date('{on_to}') and DATE_ADD('{to_to}', INTERVAL 1 DAY);"
         data4 = conects(sql)
-        return name, data, data1, data2, data3, data4
+        sql = "select SUM(smena.time_stop) as 'общее время работы без ID детали, мин' from smena " \
+              f"where id_name_worker = {id} and id_detaly = 0 and date_change between date('{on_to}') and DATE_ADD('{to_to}', INTERVAL 1 DAY);"
+        data_not_id = conects(sql)
+        return name, data, data1, data2, data3, data4, data_not_id
     else:
         # sql = "select detaly.name as 'деталь',  smena.id_operation as 'операция', smena.count_detaly as 'кол-во', smena.time_stop as 'простой станка', smena.date_change as 'дата' from smena " \
         #       "join detaly on smena.id_detaly = detaly.id " \
@@ -140,4 +143,4 @@ def view_data_works_bd(on_to, to_to, id, to_time):
               "smena.date_change as 'дата'	from smena join detaly on smena.id_detaly = detaly.id join time_work on smena.id_detaly = time_work.id_detaly and smena.id_operation = time_work.id_operation " \
               f"join operation on operation.znach = smena.id_operation where smena.date_change between '{on_to}' and DATE_ADD('{to_to}', INTERVAL 1 DAY) and smena.id_name_worker = {id};"
         data = conects(sql)
-        return name, data, 1, 1, 1, 1
+        return name, data, 1, 1, 1, 1, 1

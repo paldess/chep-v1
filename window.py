@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'цех4.ui'
+# Form implementation generated from reading ui file 'цех5.ui'
 #
 # Created by: PyQt6 UI code generator 6.2.0
 #
@@ -414,9 +414,12 @@ class Ui_MainWindow(object):
         self.indikator.setObjectName("indikator")
         self.spinBox = QtWidgets.QSpinBox(self.worker)
         self.spinBox.setEnabled(False)
-        self.spinBox.setGeometry(QtCore.QRect(780, 160, 111, 31))
+        self.spinBox.setGeometry(QtCore.QRect(920, 110, 51, 31))
         self.spinBox.setMinimum(1)
         self.spinBox.setObjectName("spinBox")
+        self.ones_detaly = QtWidgets.QCheckBox(self.worker)
+        self.ones_detaly.setGeometry(QtCore.QRect(780, 160, 201, 31))
+        self.ones_detaly.setObjectName("ones_detaly")
         self.wk.addTab(self.worker, "")
         self.control = QtWidgets.QWidget()
         self.control.setObjectName("control")
@@ -612,12 +615,12 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.wk.setCurrentIndex(2)
+        self.wk.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Chep_v7.0"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Chep_v7.1"))
         self.view_data_detaly.setText(_translate("MainWindow", "просмотр"))
         self.label.setText(_translate("MainWindow", "ID детали"))
         self.go_to.setText(_translate("MainWindow", "просмотр за период"))
@@ -645,6 +648,7 @@ class Ui_MainWindow(object):
         self.night.setText(_translate("MainWindow", "ночная смена"))
         self.stopp.setText(_translate("MainWindow", "простой станка"))
         self.cancel_change.setText(_translate("MainWindow", "сброс изменений"))
+        self.ones_detaly.setText(_translate("MainWindow", "детали без ID"))
         self.wk.setTabText(self.wk.indexOf(self.worker), _translate("MainWindow", "смена"))
         self.go.setText(_translate("MainWindow", "изменить"))
         self.label_6.setText(_translate("MainWindow", "пароль"))

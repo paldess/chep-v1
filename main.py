@@ -39,6 +39,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cancel_change.clicked.connect(self.cancel_ch)
         self.setting.clicked.connect(self.en)
         self.save_to.clicked.connect(self.safe_to_file)
+        self.ones_detaly.clicked.connect(self.en)
 
     def cancel_ch(self):
         self.clearing()
@@ -50,6 +51,13 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def en(self):
         if self.stopp.isChecked():
+            self.ones_detaly.setChecked(False)
+            self.label_9.setText('время простоя, мин')
+        elif self.ones_detaly.isChecked():
+            self.label_9.setText('время работы, мин')
+        else:
+            self.label_9.setText('')
+        if self.stopp.isChecked() or self.ones_detaly.isChecked():
             x = True
         else:
             x = False
@@ -74,7 +82,7 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if not ID_workers.isdigit():
                 errors('введите правильный ID')
             else:
-                name, data_night, data_day, data_stop, data_set, data_set_work = connect_bd.view_data_works_bd(on_to,
+                name, data_night, data_day, data_stop, data_set, data_set_work, data_not_id = connect_bd.view_data_works_bd(on_to,
                                                                                                                to_to,
                                                                                                                ID_workers,
                                                                                                                to_time)
@@ -109,9 +117,9 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
             to_time = True
             ID_workers = self.who_to.text()
             if not ID_workers.isdigit():
-                errors('введите правильный ID')
+                errors('введите ID ')
             else:
-                name, data_night, data_day, data_stop, data_set, data_set_work = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
+                name, data_night, data_day, data_stop, data_set, data_set_work, data_not_id = connect_bd.view_data_works_bd(on_to, to_to, ID_workers, to_time)
                 if name == 1:
                     errors('такого исполнителя не найдено. проверьте ID')
 
@@ -133,9 +141,11 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     view_name = pd.DataFrame(name).to_string(header=False,  col_space=30, index=False)
                     view_set = pd.DataFrame(data_set).to_string(header=True,  col_space=10, index=False, justify='left')
                     view_set_work = pd.DataFrame(data_set_work).to_string(header=True, col_space=10, index=False, justify='left')
+                    view_not_id = pd.DataFrame(data_not_id).to_string(header=True, col_space=10, index=False, justify='left')
                     self.view_window.setText(view_name)
                     self.view_window.append(view_data_day)
                     self.view_window.append(view_data_night)
+                    self.view_window.append(view_not_id)
                     self.view_window.append(view_data_stop)
                     self.view_window.append(view_set)
                     self.view_window.append(view_set_work)
@@ -176,10 +186,31 @@ class ExampleApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.indikator.setText('')
                     self.ok_worker.setText('записать')
                     errors(x)
+        elif self.ones_detaly.isChecked():
+            if self.id_worker.text().isdigit() and self.time_stop.text().isdigit():
+                id_name_worker = int(self.id_worker.text())
+                id_detaly = 0
+                id_operation = 0
+                tune = 0
+                count_detaly = 0
+                setting = 0
+                setting_work = 0
+                comment_s = self.lineEdit.text()
+                time_stop = self.time_stop.text()
+                night = self.night.isChecked()
+                x = connect_bd.inserts(id_name_worker, id_detaly, id_operation, tune, count_detaly, setting, comment_s, time_stop, night, setting_work, self.y)
+                if x == 'успешно записано':
+                    self.clearing()
+                    self.y = 0
+                    self.indikator.setText('')
+                    self.ok_worker.setText('записать')
+                    errors(x)
         else:
+            id_zapret = [0, 1]
             if self.id_worker.text().isdigit() and self.id_detail.text().isdigit() \
                     and self.id_operation.text().isdigit() and self.brak.text().isdigit() \
-                    and self.count_detail.text().isdigit() and self.time_stop.text().isdigit():
+                    and self.count_detail.text().isdigit() and self.time_stop.text().isdigit()\
+                    and int(self.id_detail.text()) not in id_zapret and int(self.id_operation.text()) not in id_zapret:
                 id_name_worker = int(self.id_worker.text())
                 id_detaly = int(self.id_detail.text())
                 id_operation = int(self.id_operation.text())
