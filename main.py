@@ -1,9 +1,9 @@
 import sys  # sys нужен для передачи argv в QApplication
 import time
-from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog
 import pandas as pd
-from window import Ui_MainWindow  # Это наш конвертированный файл дизайна
+from window_37 import Ui_MainWindow  # Это наш конвертированный файл дизайна
 import connect_bd
 from datetime import date, timedelta
 import openpyxl
